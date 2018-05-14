@@ -1,13 +1,20 @@
 package io.berrycorp.noti.utilities;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class DatabaseHelper {
 
@@ -34,10 +41,12 @@ public class DatabaseHelper {
                 while((length = inputStream.read(buffer)) > 0){
                     outputStream.write(buffer, 0, length);
                 }
-                Toast.makeText(context,"Database Ready",Toast.LENGTH_LONG).show();
+                outputStream.flush();
+                inputStream.close();
+                outputStream.close();
             }
             catch (Exception e){
-                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         }
     }

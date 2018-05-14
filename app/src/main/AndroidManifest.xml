@@ -12,8 +12,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".StartActivity">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".LoaderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +32,8 @@
             android:name=".services.AlarmService"
             android:enabled="true" />
 
-        <activity android:name=".AddReminderActivity"></activity>
+        <activity android:name=".AddReminderActivity" />
+        <activity android:name=".StartActivity"/>
     </application>
 
 </manifest>

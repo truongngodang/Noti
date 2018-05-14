@@ -45,7 +45,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             public void onSeekComplete(MediaPlayer mediaPlayer) {
                 player.stop();
                 player.release();
-                wakeLock.release();
             }
         });
     }

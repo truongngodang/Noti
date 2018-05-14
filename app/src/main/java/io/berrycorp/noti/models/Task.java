@@ -135,9 +135,12 @@ public class Task implements Serializable {
         contentValues.put("bell", this.bell);
         contentValues.put("remind_type", this.remindType);
         if (!this.startPoint.after(this.remindPoint)) {
+            database.close();
             return  0;
         } else  {
-            return (int) database.insert("TASKS", null, contentValues);
+            int res = (int) database.insert("TASKS", null, contentValues);
+            database.close();
+            return res;
         }
     }
 
@@ -148,17 +151,21 @@ public class Task implements Serializable {
         String query = "UPDATE TASKS SET name='"+ this.name +"', start_point='"+ startPoint +"', " +
                 "desc='"+ this.desc +"', remind_point='"+ remindPoint +"', bell='" + this.bell +"', remind_type='" + this.remindType + "' WHERE id='"+ this.id +"'";
         if (!this.startPoint.after(this.remindPoint)) {
+            database.close();
             return  false;
         } else  {
             database.execSQL(query);
+            database.close();
             return  true;
         }
+
     }
 
     public boolean delete(Context context) {
         SQLiteDatabase database = context.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
         String query = "DELETE FROM TASKS WHERE id='" + this.id + "'";
         database.execSQL(query);
+        database.close();
         return true;
     }
 
@@ -188,6 +195,7 @@ public class Task implements Serializable {
                 return  String.valueOf(t1.getState()).compareTo(String.valueOf(t2.getState()));
             }
         });
+        database.close();
         return tasks;
     }
 }

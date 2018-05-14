@@ -266,7 +266,7 @@ public class AddReminderActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable("keyTask", task);
         intent.putExtra("DATA", bundle);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, task.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, task.getId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(task.getRemindPoint());
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60*1000, pendingIntent);

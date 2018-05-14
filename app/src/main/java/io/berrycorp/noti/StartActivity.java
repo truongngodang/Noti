@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import io.berrycorp.noti.utilities.DatabaseHelper;
-
 public class StartActivity extends AppCompatActivity {
 
     private LinearLayout layoutReminder, layoutNote;
@@ -15,19 +13,14 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
 
-        // Khoi tao database tu thu muc assets
-        initialize();
+        setContentView(R.layout.activity_start);
 
         addControls();
         addEvents();
 
     }
 
-    private void initialize() {
-        DatabaseHelper.initDatabaseFormAssets(this);
-    };
 
     private void addControls() {
         layoutReminder = findViewById(R.id.layout_reminder);
