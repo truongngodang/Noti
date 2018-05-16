@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import io.berrycorp.noti.models.Note;
+
 public class StartActivity extends AppCompatActivity {
 
     private LinearLayout layoutReminder, layoutNote;
@@ -38,7 +40,8 @@ public class StartActivity extends AppCompatActivity {
         layoutNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(StartActivity.this, NoteActivity.class);
+                startActivity(intent);
             }
         });
     }

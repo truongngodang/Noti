@@ -19,9 +19,11 @@ import java.util.Comparator;
 import java.util.Date;
 
 import io.berrycorp.noti.receivers.AlarmReceiver;
+import io.berrycorp.noti.utilities.DatabaseHelper;
 
 import static android.content.Context.MODE_PRIVATE;
 import static io.berrycorp.noti.utilities.DatabaseHelper.DATABASE_NAME;
+import static io.berrycorp.noti.utilities.DatabaseHelper.initDatabaseFormAssets;
 
 public class Task implements Serializable {
     private int id;
@@ -32,11 +34,11 @@ public class Task implements Serializable {
     private int bell;
     private int remindType;
 
-    public static final int AFTER_HOUR = 0;
-    public static final int AFTER_DAY = 1;
-    public static final int AFTER_WEEK = 1;
-    public static final int AFTER_MONTH = 2;
-    public static final int AFTER_YEAR = 3;
+    public static final int AFTER_A_MINUTE = 0;
+    public static final int AFTER_TEN_MINUTE = 1;
+    public static final int AFTER_HOUR = 2;
+    public static final int AFTER_DAY = 3;
+    public static final int AFTER_WEEK = 4;
 
     public static final int BELL_SWEET_ALARM = 0;
 
@@ -124,7 +126,7 @@ public class Task implements Serializable {
     }
 
     public int insert(Context context) {
-        SQLiteDatabase database = context.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        SQLiteDatabase database = initDatabaseFormAssets(context);
         String startPoint = DATE_FORMAT.format(this.startPoint);
         String remindPoint = DATE_FORMAT.format(this.remindPoint);
         ContentValues contentValues = new ContentValues();
@@ -136,7 +138,7 @@ public class Task implements Serializable {
         contentValues.put("remind_type", this.remindType);
         if (!this.startPoint.after(this.remindPoint)) {
             database.close();
-            return  0;
+            return  -1;
         } else  {
             int res = (int) database.insert("TASKS", null, contentValues);
             database.close();
@@ -145,7 +147,7 @@ public class Task implements Serializable {
     }
 
     public boolean update(Context context) {
-        SQLiteDatabase database = context.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        SQLiteDatabase database = initDatabaseFormAssets(context);
         String startPoint = DATE_FORMAT.format(this.startPoint);
         String remindPoint = DATE_FORMAT.format(this.remindPoint);
         String query = "UPDATE TASKS SET name='"+ this.name +"', start_point='"+ startPoint +"', " +
@@ -162,7 +164,7 @@ public class Task implements Serializable {
     }
 
     public boolean delete(Context context) {
-        SQLiteDatabase database = context.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        SQLiteDatabase database = initDatabaseFormAssets(context);
         String query = "DELETE FROM TASKS WHERE id='" + this.id + "'";
         database.execSQL(query);
         database.close();
@@ -171,7 +173,7 @@ public class Task implements Serializable {
 
     public static ArrayList<Task> all(Context context) throws ParseException {
         ArrayList<Task> tasks = new ArrayList<>();
-        SQLiteDatabase database = context.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        SQLiteDatabase database = initDatabaseFormAssets(context);
         Cursor cursor = database.rawQuery("SELECT * FROM TASKS",null);
         if (cursor.moveToFirst() && cursor.getCount() > 0) {
             while (!cursor.isAfterLast()) {

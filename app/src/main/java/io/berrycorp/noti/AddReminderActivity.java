@@ -1,10 +1,7 @@
 package io.berrycorp.noti;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.berrycorp.noti.controllers.TaskController;
 import io.berrycorp.noti.models.Task;
-import io.berrycorp.noti.receivers.AlarmReceiver;
+import io.berrycorp.noti.utilities.MusicSingleton;
 
 public class AddReminderActivity extends AppCompatActivity {
 
@@ -56,14 +53,16 @@ public class AddReminderActivity extends AppCompatActivity {
         addEvents();
     }
 
+
     private void initialize() {
         // Adapter spinner
         bells.add("Sweet Alarm");
-        remindTypes.add("1 Giờ");
-        remindTypes.add("1 Ngày");
-        remindTypes.add("1 Tuần");
-        remindTypes.add("1 Tháng");
-        remindTypes.add("1 Năm");
+        remindTypes.add("1 Phút");
+        remindTypes.add("10 Phút");
+        remindTypes.add("Mỗi Giờ");
+        remindTypes.add("Mỗi Ngày");
+        remindTypes.add("Mỗi Tuần");
+
         ArrayAdapter<String> bellAdapter = new ArrayAdapter<String >(AddReminderActivity.this, R.layout.support_simple_spinner_dropdown_item, bells);
         spBell.setAdapter(bellAdapter);
 
@@ -86,8 +85,10 @@ public class AddReminderActivity extends AppCompatActivity {
             spRemindType.setSelection(taskToUpdate.getRemindType());
         } else if (intent.getStringExtra("keyAction").equals("add")) {
             Calendar current = Calendar.getInstance();
-            tvStartDate.setText(onlyDateFormat.format(current.getTime()));
-            tvStartTime.setText(onlyTimeFormat.format(current.getTime()));
+            Calendar currentAddOneDay = Calendar.getInstance();
+            currentAddOneDay.add(Calendar.DATE,+1);
+            tvStartDate.setText(onlyDateFormat.format(currentAddOneDay.getTime()));
+            tvStartTime.setText(onlyTimeFormat.format(currentAddOneDay.getTime()));
             tvRemindDate.setText(onlyDateFormat.format(current.getTime()));
             tvRemindTime.setText(onlyTimeFormat.format(current.getTime()));
         }
@@ -216,16 +217,10 @@ public class AddReminderActivity extends AppCompatActivity {
                 int bell = spBell.getSelectedItemPosition();
                 int remindType = spRemindType.getSelectedItemPosition();
                 Task task = new Task(name, startPoint, desc, remindPoint, bell, remindType);
-                int res = task.insert(AddReminderActivity.this);
-                if (res != 0 && res != -1) {
-                    Toast.makeText(AddReminderActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                    task.setId(res);
-                    setAlarm(task);
-                    Intent intent = new Intent(AddReminderActivity.this, ReminderActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(AddReminderActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
-                }
+
+                // Insert Task and set Alarm
+                TaskController taskController = new TaskController(task, AddReminderActivity.this);
+                taskController.createTask();
 
             }
         });
@@ -248,27 +243,9 @@ public class AddReminderActivity extends AppCompatActivity {
                 int id = taskToUpdate.getId();
                 Task task = new Task(name, startPoint, desc, remindPoint, bell, remindType);
                 task.setId(id);
-                if (task.update(AddReminderActivity.this)) {
-                    Toast.makeText(AddReminderActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    setAlarm(task);
-                    Intent intent = new Intent(AddReminderActivity.this, ReminderActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(AddReminderActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
-                }
+                TaskController taskController = new TaskController(task, AddReminderActivity.this);
+                taskController.updateTask();
             }
         });
-    }
-
-    private void setAlarm(Task task) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(AddReminderActivity.this, AlarmReceiver.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("keyTask", task);
-        intent.putExtra("DATA", bundle);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, task.getId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(task.getRemindPoint());
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60*1000, pendingIntent);
     }
 }

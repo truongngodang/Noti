@@ -7,10 +7,10 @@
     android:orientation="vertical"
     android:paddingBottom="30dp"
     android:weightSum="12"
-    tools:context=".ReminderActivity">
+    tools:context=".NoteActivity">
 
     <ListView
-        android:id="@+id/lv_tasks"
+        android:id="@+id/lv_notes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="15dp"
@@ -26,7 +26,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/button_pill"
         android:fontFamily="@font/nunito_sans_bold"
-        android:text="Thêm nhắc nhở"
+        android:text="Thêm ghi chú"
         android:textAllCaps="false"
         android:textColor="#fff"
         android:textSize="18sp" />

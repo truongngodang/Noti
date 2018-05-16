@@ -6,10 +6,8 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="15dp"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:paddingTop="15dp"
     android:weightSum="12">
 
     <LinearLayout
@@ -19,32 +17,9 @@
         android:layout_weight="12"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingRight="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito_sans"
-                android:text="16:00 - 13/5/2018"
-                android:textSize="13sp"
-                android:layout_marginRight="10dp"/>
-
-            <ImageView
-                android:id="@+id/iv_bell"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_check"
-                tools:ignore="VectorDrawableCompat" />
-
-        </LinearLayout>
+        android:paddingBottom="30dp"
+        android:paddingRight="15dp"
+        android:paddingTop="30dp">
 
         <TextView
             android:id="@+id/tv_name"
@@ -59,14 +34,14 @@
     </LinearLayout>
 
     <ImageButton
-        android:scaleType="center"
         android:id="@+id/btn_remove"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:adjustViewBounds="true"
         android:background="@null"
-        app:srcCompat="@drawable/ic_cancel"
-        tools:ignore="VectorDrawableCompat"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_cancel"
+        tools:ignore="VectorDrawableCompat" />
 </LinearLayout>

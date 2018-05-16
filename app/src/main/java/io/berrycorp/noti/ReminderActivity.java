@@ -18,6 +18,7 @@ import java.util.Date;
 
 import io.berrycorp.noti.adapters.TaskAdapter;
 import io.berrycorp.noti.models.Task;
+import io.berrycorp.noti.utilities.MusicSingleton;
 
 
 public class ReminderActivity extends AppCompatActivity {
@@ -36,6 +37,12 @@ public class ReminderActivity extends AppCompatActivity {
         initialize();
         addControls();
         addEvents();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MusicSingleton.getInstance(this).stopMusic();
     }
 
     private void initialize() {
